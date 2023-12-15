@@ -56,9 +56,10 @@ func (p *Printer) PrintMission(mission Mission) error {
 	return p.Print(GenerateTicket("MISSION BRIEF",
 		"Friend computer requires agents to execute a mission. Best of luck.",
 		"BRIEF",
-		"MISSION BREIF: "+mission.MissionBreif+NEW_LINES+
+		"MISSION BREIF:"+mission.MissionBreif+NEW_LINES+
 			"LOCATION: "+mission.Location+NEW_LINES+
-			"DIRECTIVES: "+mission.DirectivesString()))
+			"DIRECTIVES:"+NEW_LINES+mission.DirectivesString()+NEW_LINES+
+			"INVENTORIES: "+NEW_LINES+mission.InventoryString()))
 }
 
 func (p *Printer) Print(body string) error {
@@ -69,12 +70,13 @@ func (p *Printer) Print(body string) error {
 	}
 
 	command := fmt.Sprintf("cat %s > \"%s\"", SCRATCH_FILE, p.PrinterOutput)
-	log.Print(command)
 	cmd := exec.Command("sh", "-c", command)
 	output, err := cmd.Output()
 
 	if err != nil {
-		return errors.New(fmt.Sprintf("%s: %s", err, output))
+		err = errors.New(fmt.Sprintf("%s: %s", err, output))
+		log.Print("Cannot print: %s", err)
+		return err
 	}
 	return nil
 }
