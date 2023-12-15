@@ -44,4 +44,22 @@ func main() {
       log.Fatal(err)
     }
 	}
+
+  resp, err := config.SendUserMessage("I am going to get a car for the mission - Danny")
+    if err != nil {
+      log.Fatal(err)
+    }
+  log.Print(resp)
+
+  resp, err = config.SendUserMessage("I am going to look for a bigger car - Danny")
+    if err != nil {
+      log.Fatal(err)
+    }
+  log.Print(resp)
+
+  resp, err = config.SendUserMessage("I am going to stick with the first car, how much horse power does it produce? - Danny")
+    if err != nil {
+      log.Fatal(err)
+    }
+  log.Print(resp)
 }

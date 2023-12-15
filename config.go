@@ -42,7 +42,6 @@ func (m *Mission) InventoryString() string {
 		}
 	}
 
-  ret += "\n\n"
   return ret
 }
 

@@ -12,7 +12,6 @@ import (
 
 var client *openai.Client
 var chatBot openai.ChatCompletionRequest
-var messages string
 
 func (c *Config) InitAi() {
 	client = openai.NewClient(c.OpenAiKey)
@@ -20,6 +19,7 @@ func (c *Config) InitAi() {
 
 const (
 	SYSTEM_CONTROLLER = "(System controller):"
+	USER_CONTROLLER   = "(User):"
 )
 
 func (c *Config) missionPrompt() string {
@@ -43,10 +43,24 @@ func (c *Config) missionPrompt() string {
 Game context: Distopian sci-fi world, with corporate espionage very common and very little trust, 1984. As a computer you can trust no-one except your agents. One agent is a traitor.
 Your players are: %s.
 Allocate each player an inventory.
+You are the GM for the session and should handle combat, inventory, game events and story progression. You will provide extra orders occassionally.
 Output in JSON format such as this: %s`,
 		SYSTEM_CONTROLLER,
 		strings.Join(c.Players, ", "),
 		text)
+}
+
+func (c *Config) userMessagePrompt(query string) string {
+	exampleOutput := AiResponse{ResponseText: "example response"}
+	text, err := json.Marshal(exampleOutput)
+	if err != nil {
+		log.Fatalf("Cannot create example Output: %s", err)
+	}
+
+	return fmt.Sprintf(`%s a player has sent you a message.
+As the GM you will respond with story progression and describe any combats, or consequences from any actions.
+Output in JSON format such as this: %s
+%s Message: %s`, SYSTEM_CONTROLLER, text, USER_CONTROLLER, query)
 }
 
 func (c *Config) GenerateMission() {
@@ -84,6 +98,10 @@ func (c *Config) GenerateMission() {
 	if len(c.Mission.Directives) == 0 {
 		log.Fatal("No mission directives were returned")
 	}
+}
+
+func (c *Config) SendUserMessage(message string) (string, error) {
+	return SendMessage(c.userMessagePrompt(message))
 }
 
 func SendMessage(message string) (string, error) {

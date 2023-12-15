@@ -58,7 +58,7 @@ func (p *Printer) PrintMission(mission Mission) error {
 		"BRIEF",
 		"MISSION BREIF:"+mission.MissionBreif+NEW_LINES+
 			"LOCATION: "+mission.Location+NEW_LINES+
-			"DIRECTIVES:"+NEW_LINES+mission.DirectivesString()+NEW_LINES+
+			"DIRECTIVES:"+NEW_LINES+mission.DirectivesString()+
 			"INVENTORIES: "+NEW_LINES+mission.InventoryString()))
 }
 
