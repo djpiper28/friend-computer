@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 type InventoryItem struct {
 	Quantity                float64 `json:"quantity"`
@@ -30,19 +34,19 @@ func (m *Mission) DirectivesString() string {
 func (m *Mission) InventoryString() string {
 	ret := ""
 	for player, inventory := range m.Inventory {
-    ret += fmt.Sprintf("+++ %s:", player)
+		ret += fmt.Sprintf("+++ %s:", player)
 		ret += "\n"
 		for i, item := range inventory {
 			ret += fmt.Sprintf(" - %02x '%s' x %.02f", i, item.ItemName, item.Quantity)
 			ret += "\n"
 			ret += fmt.Sprintf("   Weight: %.02f", item.ItemWeight)
-      ret += "\n"
+			ret += "\n"
 			ret += fmt.Sprintf("   Description: %s", item.ItemDescriptionAndStats)
-      ret += ";\n\n"
+			ret += ";\n\n"
 		}
 	}
 
-  return ret
+	return ret
 }
 
 type Config struct {
@@ -50,4 +54,13 @@ type Config struct {
 	Mission   Mission  `json:"mission"`
 	OpenAiKey string   `json:"openAiKey"`
 	Printer   string   `json:"printer"`
+}
+
+func (c *Config) Save() error {
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(CONFIG_FILE, data, 777)
 }

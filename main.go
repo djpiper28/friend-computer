@@ -40,26 +40,17 @@ func main() {
 			config.Mission.Directives)
 
 		err = printer.PrintMission(config.Mission)
-    if err != nil {
-      log.Fatal(err)
-    }
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = config.Save()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
-  resp, err := config.SendUserMessage("I am going to get a car for the mission - Danny")
-    if err != nil {
-      log.Fatal(err)
-    }
-  log.Print(resp)
+	WithUi(func(u Ui) {
 
-  resp, err = config.SendUserMessage("I am going to look for a bigger car - Danny")
-    if err != nil {
-      log.Fatal(err)
-    }
-  log.Print(resp)
-
-  resp, err = config.SendUserMessage("I am going to stick with the first car, how much horse power does it produce? - Danny")
-    if err != nil {
-      log.Fatal(err)
-    }
-  log.Print(resp)
+	})
 }

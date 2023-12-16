@@ -56,7 +56,7 @@ func (p *Printer) PrintMission(mission Mission) error {
 	return p.Print(GenerateTicket("MISSION BRIEF",
 		"Friend computer requires agents to execute a mission. Best of luck.",
 		"BRIEF",
-		"MISSION BREIF:"+mission.MissionBreif+NEW_LINES+
+		"MISSION BREIF: "+mission.MissionBreif+NEW_LINES+
 			"LOCATION: "+mission.Location+NEW_LINES+
 			"DIRECTIVES:"+NEW_LINES+mission.DirectivesString()+
 			"INVENTORIES: "+NEW_LINES+mission.InventoryString()))
