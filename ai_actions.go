@@ -1,9 +1,9 @@
 package main
 
 type AiOrder struct {
-  OrderText string `json:"orderText"`
+	OrderText string `json:"orderText"`
 }
 
 type AiResponse struct {
-  ResponseText string `json:"responseText"`
+	ResponseText string `json:"responseText"`
 }

@@ -30,16 +30,32 @@ func WithUi(func(Ui)) {
 		SetDynamicColors(true).
 		SetText("[green]Players[white]: Testing")
 
-	systemInformationBox := tview.NewFrame(playerInfo).
-		SetBorder(true).
-		SetBackgroundColor(tcell.ColorBlack.TrueColor()).
-		SetBorderColor(tcell.ColorGreen.TrueColor()).
+	systemInformationBox := tview.NewGrid().
+		SetColumns(-1).
+		SetRows(-1).
+		AddItem(playerInfo, 0, 0, 1, 1, 0, 0, false)
+
+	systemInformationBox.SetBorder(true).
 		SetTitle("System Information")
 
-	logBox := tview.NewFrame(tview.NewBox()).
-		SetBorder(true).
-		SetBackgroundColor(tcell.ColorBlack.TrueColor()).
-		SetBorderColor(tcell.ColorGreen.TrueColor()).
+	commandInput := tview.NewInputField().
+		SetLabel("Command").
+		SetPlaceholder("'help' for assistance").
+		SetDoneFunc(func(key tcell.Key) {
+
+		})
+
+	logBox := tview.NewGrid().
+		SetColumns(-1).
+		SetRows(-100, -1, 1).
+		AddItem(tview.NewBox().
+			SetTitle("Test").
+			SetBorder(true),
+			0, 0, 1, 1, 0, 0, false).
+		AddItem(tview.NewBox(), 1, 0, 1, 1, 0, 0, false).
+		AddItem(commandInput, 2, 0, 1, 1, 0, 0, true)
+
+	logBox.SetBorder(true).
 		SetTitle("EVENT LOG")
 
 	root := tview.NewGrid().
@@ -48,13 +64,13 @@ func WithUi(func(Ui)) {
 		AddItem(logBox, 0, 0, 1, 1, 0, 0, false).
 		AddItem(systemInformationBox, 0, 1, 1, 1, 0, 0, false)
 
-	root.SetTitle("FRIEND COMPUTER - TOP SECRET").
-		SetBackgroundColor(tcell.ColorBlack.TrueColor())
+	root.SetTitle("FRIEND COMPUTER - TOP SECRET")
 
-	err := tview.NewApplication().SetRoot(root, true).
+	app := tview.NewApplication().SetRoot(root, true).
 		EnableMouse(true).
-		SetFocus(root).
-		Run()
+		SetFocus(commandInput)
+
+	err := app.Run()
 
 	if err != nil {
 		log.Fatalf("Cannot start ui: %s", err)
